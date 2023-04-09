@@ -1,4 +1,4 @@
-import {is247Prediction, Prediction} from '@/types/247';
+import {isPrediction, Prediction} from '@/types/prediction';
 import Notifier from '@/utils/notifier';
 import axios from 'axios';
 import {MongoClient} from 'mongodb';
@@ -20,7 +20,7 @@ export default class TwoFourSevenDetector {
     return axios.get(FETCH_URL)
         .then(async response => {
           if (Array.isArray(response.data)) {
-            const predictions = response.data.filter(is247Prediction);
+            const predictions = response.data.filter(isPrediction);
 
             predictions.sort(
                 (p1, p2) => new Date(p2.predictionDate).getTime() -
