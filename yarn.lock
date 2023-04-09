@@ -702,7 +702,6 @@ __metadata:
     "@types/react-dom": 18.0.11
     axios: ^1.3.5
     cheerio: ^1.0.0-rc.12
-    dotenv: ^16.0.3
     eslint: 8.38.0
     eslint-config-next: 13.3.0
     mongodb: ^5.2.0
@@ -887,13 +886,6 @@ __metadata:
     domelementtype: ^2.3.0
     domhandler: ^5.0.1
   checksum: 23aa7a840572d395220e173cb6263b0d028596e3950100520870a125af33ff819e6f609e1606d6f7d73bd9e7feb03bb404286e57a39063b5384c62b724d987b3
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^16.0.3":
-  version: 16.0.3
-  resolution: "dotenv@npm:16.0.3"
-  checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
   languageName: node
   linkType: hard
 
