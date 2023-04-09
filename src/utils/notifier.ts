@@ -13,6 +13,14 @@ export default class Notifier {
         pass: process.env.GMAIL_PASS,
       },
     });
+
+    this.transporter.verify((error) => {
+      if (error) {
+        console.log('Nodemailer transporter is not working properly: ', error);
+      } else {
+        console.log('Server is ready to take our messages');
+      }
+    });
   }
 
   notify(content: string) {
@@ -23,6 +31,7 @@ export default class Notifier {
       text: content,
     };
 
+    console.log('[DEBUG] 1');
     this.transporter.sendMail(mailOption, (err, info) => {
       if (err) {
         console.error('Error sending email: ', err);
@@ -30,5 +39,7 @@ export default class Notifier {
         console.log('Email sent ', info.response);
       }
     });
+
+    console.log('[DEBUG] 2');
   }
 }
