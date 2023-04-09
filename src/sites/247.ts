@@ -43,6 +43,8 @@ export default class TwoFourSevenDetector {
           return response.data;
         })
         .catch(err => {
+          console.log('There is some error with 247 detection: ', err);
+
           this.notifier.notify(
               `There is some error with 247 detection: ${err}`);
         });
