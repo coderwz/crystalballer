@@ -43,7 +43,7 @@ export default class TwoFourSevenDetector {
 
               if (old.expertKey !== newPrediction.expertKey ||
                   old.playerKey !== newPrediction.playerKey) {
-                this.notifier.notify(`Crystal Ball Alert!!! => ${
+                await this.notifier.notify(`Crystal Ball Alert!!! => ${
                     newPrediction.expertName} predicts ${
                     newPrediction.playerName} to ${newPrediction.prediction}`);
 

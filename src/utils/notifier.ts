@@ -23,7 +23,7 @@ export default class Notifier {
     });
   }
 
-  notify(content: string) {
+  async notify(content: string) {
     const mailOption = {
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
@@ -31,15 +31,17 @@ export default class Notifier {
       text: content,
     };
 
-    console.log('[DEBUG] 1');
-    this.transporter.sendMail(mailOption, (err, info) => {
-      if (err) {
-        console.error('Error sending email: ', err);
-      } else {
-        console.log('Email sent ', info.response);
-      }
+    await new Promise((resolve, reject) => {
+      // send mail
+      this.transporter.sendMail(mailOption, (err, info) => {
+        if (err) {
+          console.error('Error sending email: ', err);
+          reject(err);
+        } else {
+          console.log('Email sent ', info);
+          resolve(info);
+        }
+      });
     });
-
-    console.log('[DEBUG] 2');
   }
 }
