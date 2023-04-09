@@ -15,7 +15,7 @@ export default class Notifier {
     });
   }
 
-  notify(content: string) {
+  notify(content: string, onSuccess?: () => void) {
     const mailOption = {
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
@@ -28,6 +28,10 @@ export default class Notifier {
         console.error('Error sending email: ', err);
       } else {
         console.log('Email sent ', info.response);
+
+        if (onSuccess) {
+          onSuccess();
+        }
       }
     });
   }
