@@ -1,5 +1,9 @@
 import TwoFourSevenDetector from '@/sites/247';
-import type {NextApiRequest, NextApiResponse} from 'next'
+import * as dotenv from 'dotenv'  // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+
+import type {NextApiRequest, NextApiResponse} from 'next';
+
+dotenv.config();
 
 type Data = {};
 

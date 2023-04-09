@@ -1,5 +1,8 @@
 export type Prediction = {
   playerKey: number; expertKey: number; predictionDate: string;
+  expertName: string;
+  playerName: string;
+  prediction: string;
 };
 
 export const is247Prediction = (prediction:

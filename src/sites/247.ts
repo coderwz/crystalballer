@@ -1,26 +1,24 @@
-import {is247Prediction} from '@/types/247';
+import {is247Prediction, Prediction} from '@/types/247';
 import Notifier from '@/utils/notifier';
 import axios from 'axios';
-import path from 'path';
-
-const fs = require('fs')
+import {MongoClient} from 'mongodb';
 
 
 const FETCH_URL =
     'https://ipa.247sports.com/rdb/v1/sites/33/sports/1/currentTargetPredictions/?pageSize=3';
 
-const DATA_FILE = path.join(process.cwd(), 'src/data/247.json');
-
 export default class TwoFourSevenDetector {
   private readonly notifier: Notifier;
+  private readonly dbClient: MongoClient;
 
   constructor() {
     this.notifier = new Notifier();
+    this.dbClient = new MongoClient(process.env.MONGODB_URI!);
   }
 
   async detect() {
     return axios.get(FETCH_URL)
-        .then(response => {
+        .then(async response => {
           if (Array.isArray(response.data)) {
             const predictions = response.data.filter(is247Prediction);
 
@@ -28,16 +26,32 @@ export default class TwoFourSevenDetector {
                 (p1, p2) => new Date(p2.predictionDate).getTime() -
                     new Date(p1.predictionDate).getTime());
 
-            if (predictions.length) {
-              const oldObj = JSON.parse(fs.readFileSync(DATA_FILE));
+            if (!predictions.length) {
+              throw new Error('247 returning no predictions!');
+            }
 
-              if (!is247Prediction(oldObj) ||
-                  (oldObj.expertKey !== predictions[0].expertKey ||
-                   oldObj.playerKey !== predictions[0].playerKey)) {
-                this.notifier.notify('There is a new 247 crystal ball!!!');
+            try {
+              const db = this.dbClient.db(process.env.MONGODB_DB_NAME!);
+              const collection =
+                  db.collection(process.env.MONGODB_DB_247_COLLECTION!);
 
-                fs.writeFileSync(DATA_FILE, JSON.stringify(predictions[0]));
+              const old =
+                  (await collection.findOne({}, {sort: {$natural: -1}})) as
+                  unknown as Prediction;
+
+              const newPrediction = predictions[0];
+
+              if (old.expertKey !== newPrediction.expertKey ||
+                  old.playerKey !== newPrediction.playerKey) {
+                this.notifier.notify(`Crystal Ball Alert!!! => ${
+                    newPrediction.expertName} predicts ${
+                    newPrediction.playerName} to ${newPrediction.prediction}`);
+
+                await collection.insertOne(newPrediction);
               }
+
+            } finally {
+              this.dbClient.close();
             }
           }
 
