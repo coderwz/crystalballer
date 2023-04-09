@@ -50,9 +50,13 @@ export default class TwoFourSevenDetector {
                 await collection.insertOne(newPrediction);
               }
 
+            } catch (err) {
+              console.log('Error connecting with mongodb: ', err);
             } finally {
               this.dbClient.close();
             }
+          } else {
+            console.error('247 response is not an array.');
           }
 
           return response.data;
