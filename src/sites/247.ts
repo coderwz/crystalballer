@@ -13,7 +13,9 @@ export default class TwoFourSevenDetector {
 
   constructor() {
     this.notifier = new Notifier();
+    console.log('[DEBUG] 1');
     this.dbClient = new MongoClient(process.env.MONGODB_URI!);
+    console.log('[DEBUG] 2');
   }
 
   async detect() {
@@ -31,9 +33,12 @@ export default class TwoFourSevenDetector {
             }
 
             try {
+              console.log('[DEBUG] 3');
               const db = this.dbClient.db(process.env.MONGODB_DB_NAME!);
+              console.log('[DEBUG] 4');
               const collection =
                   db.collection(process.env.MONGODB_DB_247_COLLECTION!);
+              console.log('[DEBUG] 5');
 
               const old =
                   (await collection.findOne({}, {sort: {$natural: -1}})) as
