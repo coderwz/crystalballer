@@ -1,6 +1,7 @@
 import {is247Prediction} from '@/types/247';
 import Notifier from '@/utils/notifier';
 import axios from 'axios';
+import path from 'path';
 
 const fs = require('fs')
 
@@ -8,7 +9,7 @@ const fs = require('fs')
 const FETCH_URL =
     'https://ipa.247sports.com/rdb/v1/sites/33/sports/1/currentTargetPredictions/?pageSize=3';
 
-const DATA_FILE = 'src/data/247.json';
+const DATA_FILE = path.join(process.cwd(), 'src/data/247.json');
 
 export default class TwoFourSevenDetector {
   private readonly notifier: Notifier;
