@@ -66,10 +66,9 @@ export default class On3Detector {
 
             if (!old || old.expertKey !== newPrediction.expertKey ||
                 old.playerKey !== newPrediction.playerKey) {
-              await this.notifier.notify(
-                  `On3 RPM Alert!!! => ${newPrediction.expertName} predicts ${
-                      newPrediction.playerName} to
-                    ${newPrediction.prediction}`);
+              await this.notifier.notify(`On3 RPM Alert!!! => ${
+                  newPrediction.expertName} predicts ${
+                  newPrediction.playerName} to ${newPrediction.prediction}`);
 
               await collection.insertOne(newPrediction);
             }
