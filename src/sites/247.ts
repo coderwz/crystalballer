@@ -21,8 +21,8 @@ export default class TwoFourSevenDetector {
       const predictions = data.filter(isPrediction);
 
       predictions.sort(
-          (p1, p2) => new Date(p2.predictionDate).getTime() -
-              new Date(p1.predictionDate).getTime());
+          (p1, p2) => new Date(p2.predictionDate!).getTime() -
+              new Date(p1.predictionDate!).getTime());
 
       if (!predictions.length) {
         throw new Error('247 returning no predictions!');
