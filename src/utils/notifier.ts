@@ -23,12 +23,12 @@ export default class Notifier {
     });
   }
 
-  async notify(content: string) {
+  async notify(htmlContent: string) {
     const mailOption = {
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
       subject: 'A new prediction is in!',
-      text: content,
+      html: htmlContent,
     };
 
     await new Promise((resolve, reject) => {

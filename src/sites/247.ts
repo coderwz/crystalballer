@@ -1,71 +1,36 @@
-import {isPrediction, Prediction} from '@/types/prediction';
-import Notifier from '@/utils/notifier';
-import axios from 'axios';
-import {MongoClient} from 'mongodb';
+import {isPrediction} from '@/types/prediction';
+import {Detector} from '@/utils/detector';
 
 
 const FETCH_URL =
     'https://ipa.247sports.com/rdb/v1/sites/33/sports/1/currentTargetPredictions/?pageSize=3';
 
 export default class TwoFourSevenDetector {
-  private readonly notifier: Notifier;
-  private readonly dbClient: MongoClient;
+  private readonly detector: Detector;
 
   constructor() {
-    this.notifier = new Notifier();
-    this.dbClient = new MongoClient(process.env.MONGODB_URI!);
+    this.detector = new Detector(
+        '247 Crystal ball', process.env.MONGODB_DB_247_COLLECTION!,
+        'https://247sports.com/');
   }
 
   async detect() {
-    return axios.get(FETCH_URL)
-        .then(async response => {
-          if (Array.isArray(response.data)) {
-            const predictions = response.data.filter(isPrediction);
+    const data = await this.detector.load(FETCH_URL);
 
-            predictions.sort(
-                (p1, p2) => new Date(p2.predictionDate).getTime() -
-                    new Date(p1.predictionDate).getTime());
+    if (Array.isArray(data)) {
+      const predictions = data.filter(isPrediction);
 
-            if (!predictions.length) {
-              throw new Error('247 returning no predictions!');
-            }
+      predictions.sort(
+          (p1, p2) => new Date(p2.predictionDate).getTime() -
+              new Date(p1.predictionDate).getTime());
 
-            try {
-              const db = this.dbClient.db(process.env.MONGODB_DB_NAME!);
-              const collection =
-                  db.collection(process.env.MONGODB_DB_247_COLLECTION!);
+      if (!predictions.length) {
+        throw new Error('247 returning no predictions!');
+      }
 
-              const old =
-                  (await collection.findOne({}, {sort: {$natural: -1}})) as
-                  unknown as Prediction;
-
-              const newPrediction = predictions[0];
-
-              if (old.expertKey !== newPrediction.expertKey ||
-                  old.playerKey !== newPrediction.playerKey) {
-                await this.notifier.notify(`Crystal Ball Alert!!! => ${
-                    newPrediction.expertName} predicts ${
-                    newPrediction.playerName} to ${newPrediction.prediction}`);
-
-                await collection.insertOne(newPrediction);
-              }
-
-            } catch (err) {
-              console.log('Error connecting with mongodb: ', err);
-            } finally {
-              this.dbClient.close();
-            }
-          } else {
-            console.error('247 response is not an array.');
-          }
-
-          return response.data;
-        })
-        .catch(err => {
-          console.log('There is some error with 247 detection: ', err);
-
-          this.notifier.notify(
-              `There is some error with 247 detection: ${err}`);
-        });
+      this.detector.compareAndNotify(predictions[0]);
+    } else {
+      console.error('Incorrect 247 data format: ', data);
+    }
   }
 }
