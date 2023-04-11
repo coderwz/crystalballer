@@ -1,4 +1,4 @@
-A small tool to detect and notify me whenever there are new college football recruiting predictions.
+A small tool that monitors college football recruiting predictions and alerts me when there are new ones.
 
 Currently it supports
 - 247 Crystal ball
