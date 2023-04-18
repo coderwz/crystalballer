@@ -31,7 +31,7 @@ export default class RivalsDetector {
     const match = newPredictionText.match(PREDICTION_REGEX);
 
     if (match && match.length === 4) {
-      this.detector.compareAndNotify({
+      await this.detector.compareAndNotify({
         expertKey: match[1],
         expertName: match[1],
         playerKey: match[2],

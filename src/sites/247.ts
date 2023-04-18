@@ -28,7 +28,7 @@ export default class TwoFourSevenDetector {
         throw new Error('247 returning no predictions!');
       }
 
-      this.detector.compareAndNotify(predictions[0]);
+      await this.detector.compareAndNotify(predictions[0]);
     } else {
       console.error('Incorrect 247 data format: ', data);
     }
