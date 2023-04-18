@@ -45,7 +45,11 @@ export class Detector {
             
             Visit <a href="${this.siteUrl}">${this.siteUrl}</a> for details.`);
 
-        await collection.insertOne(newPrediction);
+        const res = await collection.insertOne(newPrediction);
+
+        if (res.insertedId) {
+          console.log('Successfully inserted to db for id: ', res.insertedId);
+        }
       }
 
     } catch (err) {
