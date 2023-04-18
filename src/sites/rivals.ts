@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio';
 
 const FETCH_URL = 'https://n.rivals.com/futurecast';
 const PREDICTION_REGEX =
-    /^([a-zA-Z\s]+)\sforecasts\s([a-zA-Z\s]+)\s\(.*?\)\s{3}to\s([a-zA-Z\s]+)\.$/;
+    /^([a-zA-Z\s]+)\sforecasts\s([a-zA-Z\s]+)\s\(.*?\)\sto\s([a-zA-Z\s]+)\.$/;
 
 export default class RivalsDetector {
   private readonly detector: Detector;
@@ -24,7 +24,9 @@ export default class RivalsDetector {
     const newPredictionText =
         $('[class^="RecentForecasts_forecastList__"] [class^="ForecastActivity_forecastText__"]')
             .first()
-            .text();
+            .text()
+            .split(/\s+/)
+            .join(' ');
 
     const match = newPredictionText.match(PREDICTION_REGEX);
 

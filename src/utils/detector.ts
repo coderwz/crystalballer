@@ -48,7 +48,8 @@ export class Detector {
         const res = await collection.insertOne(newPrediction);
 
         if (res.insertedId) {
-          console.log('Successfully inserted to db for id: ', res.insertedId);
+          console.log(
+              'Successfully inserted to db for id: ', res.insertedId.id);
         }
       }
 
