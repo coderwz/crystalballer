@@ -9,8 +9,8 @@ export default class Notifier {
       port: 465,
       secure: true,  // true for 465, false for other ports
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS,
+        user: process.env.EMAIL_FROM_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -25,8 +25,8 @@ export default class Notifier {
 
   async notify(htmlContent: string) {
     const mailOption = {
-      from: process.env.GMAIL_USER,
-      to: process.env.GMAIL_USER,
+      from: process.env.EMAIL_FROM_USER,
+      to: process.env.EMAIL_TO_USER,
       subject: 'A new prediction is in!',
       html: htmlContent,
     };
