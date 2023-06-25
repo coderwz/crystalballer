@@ -24,11 +24,7 @@ export default class TwoFourSevenDetector {
           (p1, p2) => new Date(p2.predictionDate!).getTime() -
               new Date(p1.predictionDate!).getTime());
 
-      if (!predictions.length) {
-        throw new Error('247 returning no predictions!');
-      }
-
-      await this.detector.compareAndNotify(predictions[0]);
+      await this.detector.compareAndNotify(predictions);
     } else {
       console.error('Incorrect 247 data format: ', data);
     }

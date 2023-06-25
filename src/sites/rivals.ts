@@ -31,13 +31,13 @@ export default class RivalsDetector {
     const match = newPredictionText.match(PREDICTION_REGEX);
 
     if (match && match.length === 4) {
-      await this.detector.compareAndNotify({
-        expertKey: match[1],
-        expertName: match[1],
-        playerKey: match[2],
-        playerName: match[2],
-        prediction: match[3],
-      } as Prediction);
+      await this.detector.compareAndNotify([{
+                                             expertKey: match[1],
+                                             expertName: match[1],
+                                             playerKey: match[2],
+                                             playerName: match[2],
+                                             prediction: match[3],
+                                           }] as Prediction[]);
     } else {
       console.error('Rivals future cast regex matching error');
     }

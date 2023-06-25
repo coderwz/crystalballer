@@ -51,7 +51,7 @@ export default class On3Detector {
             .get()
             .filter(isPrediction);
 
-    await this.detector.compareAndNotify(predictions[0]);
+    await this.detector.compareAndNotify(predictions);
   }
 
   private capitalizeFirstLetters(str: string) {

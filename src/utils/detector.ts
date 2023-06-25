@@ -23,9 +23,9 @@ export class Detector {
     });
   }
 
-  async compareAndNotify(newPrediction?: Prediction) {
-    if (!newPrediction) {
-      console.error(`No new ${this.predictionName} prediction`);
+  async compareAndNotify(newPredictions: Prediction[]) {
+    if (!newPredictions.length) {
+      console.log(`No new ${this.predictionName} prediction`);
 
       return;
     }
@@ -34,23 +34,21 @@ export class Detector {
       const db = this.dbClient.db(process.env.MONGODB_DB_NAME!);
       const collection = db.collection(this.dbCollection);
 
-      const old = (await collection.findOne({}, {sort: {$natural: -1}})) as
-          unknown as Prediction;
+      const existingPredictions =
+          (await collection.find({}, {sort: {$natural: -1}})
+               .limit(10)
+               .toArray()) as unknown as Prediction[];
+      const existingPredictionKeys = new Set(existingPredictions.map(
+          prediction => `${prediction.playerKey}-${prediction.expertKey}`));
 
-      if (!old || old.expertKey !== newPrediction.expertKey ||
-          old.playerKey !== newPrediction.playerKey) {
-        await this.notifier.notify(`${this.predictionName} Alert!!! => ${
-            newPrediction.expertName} predicts ${newPrediction.playerName} to ${
-            newPrediction.prediction}
-            
-            Visit <a href="${this.siteUrl}">${this.siteUrl}</a> for details.`);
+      const toBeNotified = newPredictions.slice(0, 10).filter(
+          prediction => !existingPredictionKeys.has(
+              `${prediction.playerKey}-${[prediction.expertKey]}`));
 
-        const res = await collection.insertOne(newPrediction);
+      if (toBeNotified.length) {
+        await this.notifier.notify(this.composeNotificationEmail(toBeNotified));
 
-        if (res.insertedId) {
-          console.log(
-              'Successfully inserted to db for id: ', res.insertedId.id);
-        }
+        const res = await collection.insertMany(toBeNotified);
       }
 
     } catch (err) {
@@ -58,5 +56,20 @@ export class Detector {
     } finally {
       this.dbClient.close();
     }
+  }
+
+  private composeNotificationEmail(newPredictions: Prediction[]) {
+    let res = `${this.predictionName} Alert!!! =><br>`;
+    res +=
+        newPredictions
+            .map(
+                newPrediction => ` - ${newPrediction.expertName} predicts ${
+                    newPrediction.playerName} to ${newPrediction.prediction}`)
+            .join('<br>');
+
+    res +=
+        `<br>Visit <a href="${this.siteUrl}">${this.siteUrl}</a> for details.`;
+
+    return res;
   }
 }
