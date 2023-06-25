@@ -36,7 +36,7 @@ export class Detector {
 
       const existingPredictions =
           (await collection.find({}, {sort: {$natural: -1}})
-               .limit(10)
+               .limit(20)
                .toArray()) as unknown as Prediction[];
       const existingPredictionKeys = new Set(existingPredictions.map(
           prediction => `${prediction.playerKey}-${prediction.expertKey}`));
