@@ -48,7 +48,7 @@ export class Detector {
       if (toBeNotified.length) {
         await this.notifier.notify(this.composeNotificationEmail(toBeNotified));
 
-        const res = await collection.insertMany(toBeNotified);
+        await collection.insertMany(toBeNotified);
       }
 
     } catch (err) {

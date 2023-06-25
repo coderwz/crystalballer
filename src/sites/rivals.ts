@@ -21,25 +21,23 @@ export default class RivalsDetector {
 
     const $ = cheerio.load(data);
 
-    const newPredictionText =
-        $('[class^="RecentForecasts_forecastList__"] [class^="ForecastActivity_forecastText__"]')
-            .first()
-            .text()
-            .split(/\s+/)
-            .join(' ');
+    const newPredictionTexts =
+        Array
+            .from($(
+                '[class^="RecentForecasts_forecastList__"] [class^="ForecastActivity_forecastText__"]:lt(10)'))
+            .map(html => $(html).text().split(/\s+/).join(' '));
 
-    const match = newPredictionText.match(PREDICTION_REGEX);
+    const predictions =
+        newPredictionTexts.map(text => text.match(PREDICTION_REGEX))
+            .filter(Boolean)
+            .map(match => ({
+                            expertKey: match![1],
+                            expertName: match![1],
+                            playerKey: match![2],
+                            playerName: match![2],
+                            prediction: match![3],
+                          }) as Prediction);
 
-    if (match && match.length === 4) {
-      await this.detector.compareAndNotify([{
-                                             expertKey: match[1],
-                                             expertName: match[1],
-                                             playerKey: match[2],
-                                             playerName: match[2],
-                                             prediction: match[3],
-                                           }] as Prediction[]);
-    } else {
-      console.error('Rivals future cast regex matching error');
-    }
+    await this.detector.compareAndNotify(predictions);
   }
 }
