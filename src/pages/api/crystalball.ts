@@ -1,4 +1,4 @@
-import TwoFourSevenDetector from '@/sites/247';
+import TwoFourSevenDetector from '@/sites/247/247';
 import On3Detector from '@/sites/on3';
 import RivalsDetector from '@/sites/rivals';
 import type {NextApiRequest, NextApiResponse} from 'next';

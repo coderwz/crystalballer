@@ -1,6 +1,8 @@
 import {isPrediction} from '@/types/prediction';
 import {Detector} from '@/utils/detector';
 
+import {SchoolMappings} from './school-mappings';
+
 
 const FETCH_URL =
     'https://ipa.247sports.com/rdb/v1/sites/33/sports/1/currentTargetPredictions/?pageSize=3';
@@ -18,7 +20,13 @@ export default class TwoFourSevenDetector {
     const data = await this.detector.load(FETCH_URL);
 
     if (Array.isArray(data)) {
-      const predictions = data.filter(isPrediction);
+      const predictions =
+          data.filter(isPrediction)
+              .map(prediction => ({
+                     ...prediction,
+                     prediction: SchoolMappings[prediction.prediction] ??
+                         prediction.prediction,
+                   }));
 
       predictions.sort(
           (p1, p2) => new Date(p2.predictionDate!).getTime() -
