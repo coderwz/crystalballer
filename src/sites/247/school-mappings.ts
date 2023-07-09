@@ -62,7 +62,7 @@ export const SchoolMappings: Record<string, string> = {
   BAMA: 'Alabama',
   BAY: 'Baylor',
   ORE: 'Oregon',
-  TENN: 'Tennesse',
+  TENN: 'Tennessee',
   EWU: 'Eastern Washington University',
   HARV: 'Harvard',
 };
