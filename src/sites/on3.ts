@@ -34,10 +34,16 @@ export default class On3Detector {
                   item$(
                       '[class^="PredictionCenterItem_dateTime"],[class*=" PredictionCenterItem_dateTime"]')
                       .text();
-              const prediction = this.capitalizeFirstLetters(
+              const isFlipping =
+                  item$(
+                      '[class^="PredictionCenterItem_predictionSwappedIcon__"]')
+                      .length > 0;
+              const predictions =
                   item$('img[class^="PredictionCenterItem_teamLogo"]')
-                      .attr('title') ??
-                  '');
+                      .map((_, teamImg) => $(teamImg).attr('title') ?? '')
+                      .map(
+                          (_, teamName) =>
+                              this.capitalizeFirstLetters(teamName));
 
               return {
                 playerKey: playerName,
@@ -45,7 +51,7 @@ export default class On3Detector {
                 expertKey: expertName,
                 expertName,
                 predictionDate: predictionTime,
-                prediction,
+                prediction: isFlipping ? predictions[1] : predictions[0],
               };
             })
             .get()
