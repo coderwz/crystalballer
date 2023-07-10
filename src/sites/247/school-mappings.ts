@@ -65,4 +65,5 @@ export const SchoolMappings: Record<string, string> = {
   TENN: 'Tennessee',
   EWU: 'Eastern Washington University',
   HARV: 'Harvard',
+  UTAH: 'Utah',
 };
