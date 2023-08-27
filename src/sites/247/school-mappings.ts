@@ -66,4 +66,10 @@ export const SchoolMappings: Record<string, string> = {
   EWU: 'Eastern Washington University',
   HARV: 'Harvard',
   UTAH: 'Utah',
+  POST: 'Portland State',
+  UCD: 'UC Davis',
+  TXST: 'Texas State',
+  ARST: 'Arkansa State',
+  FRSNO: 'Fresno State',
+  ALAM: 'Alabama A&M',
 };
