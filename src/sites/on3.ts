@@ -40,10 +40,11 @@ export default class On3Detector {
                 item$('[class^="PredictionCenterItem_predictionSwappedIcon__"]')
                     .length > 0;
             const predictions =
-                item$('img[class^="PredictionCenterItem_teamLogo"]')
-                    .map((_, teamImg) => $(teamImg).attr('title') ?? '')
+                item$('a[class*=" PredictionCenterItem_teamLogoLink__"]')
+                    .map((_, teamLink) => $(teamLink).attr('href') ?? '')
                     .map(
-                        (_, teamName) => this.capitalizeFirstLetters(teamName));
+                        (_, teamName) =>
+                            this.extractTeamNameFromLink(teamName));
 
             return {
               playerKey: playerName,
@@ -68,10 +69,15 @@ export default class On3Detector {
     await this.detector.compareAndNotify(sortedPredictions);
   }
 
-  private capitalizeFirstLetters(str: string) {
-    return str.trim()
-        .split(' ')
-        .map(item => item.charAt(0).toUpperCase() + item.slice(1))
+  private extractTeamNameFromLink(href: string) {
+    const pattern =
+        /\/college\/([a-z\-]+)\/football\/\d+\/industry-comparison-commits\//;
+
+    const schoolName = (href.match(pattern) ?? [])[1] ?? '';
+
+    return schoolName.split('-')
+        .filter(Boolean)
+        .map(str => (str[0].toUpperCase() + str.slice(1)))
         .join(' ');
   }
 }

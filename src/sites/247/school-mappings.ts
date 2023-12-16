@@ -72,4 +72,5 @@ export const SchoolMappings: Record<string, string> = {
   ARST: 'Arkansa State',
   FRSNO: 'Fresno State',
   ALAM: 'Alabama A&M',
+  COL: 'Colorado',
 };
