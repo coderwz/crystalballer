@@ -73,5 +73,8 @@ export const SchoolMappings: Record<string, string> = {
   FRSNO: 'Fresno State',
   ALAM: 'Alabama A&M',
   COL: 'Colorado',
-  SYR: 'Syracuse'
+  SYR: 'Syracuse',
+  MST: 'McNeese State',
+  FAU: 'Florida Atlantic',
+  WKU: 'Western Kentucky'
 };
