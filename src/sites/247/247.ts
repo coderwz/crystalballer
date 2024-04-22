@@ -13,7 +13,7 @@ export default class TwoFourSevenDetector {
   constructor() {
     this.detector = new Detector(
         '247 Crystal ball', process.env.MONGODB_DB_247_COLLECTION!,
-        'https://247sports.com/');
+        'https://247sports.com/Season/2025-Football/CurrentTargetPredictions/');
   }
 
   async detect() {

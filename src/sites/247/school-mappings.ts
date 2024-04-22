@@ -76,5 +76,6 @@ export const SchoolMappings: Record<string, string> = {
   SYR: 'Syracuse',
   MST: 'McNeese State',
   FAU: 'Florida Atlantic',
-  WKU: 'Western Kentucky'
+  WKU: 'Western Kentucky',
+  MINN: 'University of Minnesota'
 };
