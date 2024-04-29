@@ -77,5 +77,7 @@ export const SchoolMappings: Record<string, string> = {
   MST: 'McNeese State',
   FAU: 'Florida Atlantic',
   WKU: 'Western Kentucky',
-  MINN: 'University of Minnesota'
+  MINN: 'University of Minnesota',
+  TLNE: 'Tulane University',
+  MIAO: 'Miami Ohio',
 };
