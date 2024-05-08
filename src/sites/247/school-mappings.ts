@@ -80,4 +80,5 @@ export const SchoolMappings: Record<string, string> = {
   MINN: 'University of Minnesota',
   TLNE: 'Tulane University',
   MIAO: 'Miami Ohio',
+  SJSU: 'San Jose State University',
 };
