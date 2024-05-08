@@ -4,8 +4,7 @@ import * as cheerio from 'cheerio';
 
 
 const FETCH_URLS = [
-  'https://www.on3.com/db/expert-predictions/football/2024/',
-  'https://www.on3.com/db/expert-predictions/football/2025/',
+  'https://www.on3.com/db/expert-predictions/football/all/',
 ];
 
 export default class On3Detector {
@@ -14,7 +13,7 @@ export default class On3Detector {
   constructor() {
     this.detector = new Detector(
         'On3 RPM', process.env.MONGODB_DB_ON3_COLLECTION!,
-        'https://www.on3.com/db/expert-predictions/football/2025/');
+        'https://www.on3.com/db/expert-predictions/football/all/');
   }
 
   async detect() {
