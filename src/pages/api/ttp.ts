@@ -3,11 +3,6 @@ import {NextApiRequest, NextApiResponse} from 'next/types';
 
 type Data = {};
 
-interface SlotAvailabilityResponse {
-  'availableSlots': Array<any>;
-  'lastPublishedDate': string;
-}
-
 export default async function handler(
     req: NextApiRequest, res: NextApiResponse<Data>) {
   // Chicago enrollment center
@@ -16,7 +11,7 @@ export default async function handler(
   try {
     const data = await fetchSlotAvailability(locationId);
     let available = false;
-    if (data.availableSlots.length > 0) {
+    if (data.length > 0) {
       available = true;
       const notifier = new Notifier();
       const content = 'Ding ding ding!!! A new slot is available, chop chop!'
@@ -31,11 +26,10 @@ export default async function handler(
   }
 }
 
-async function fetchSlotAvailability(locationId: number):
-    Promise<SlotAvailabilityResponse> {
+async function fetchSlotAvailability(locationId: number): Promise<any[]> {
   const url =
-      `https://ttp.cbp.dhs.gov/schedulerapi/slot-availability?locationId=${
-          locationId}`;
+      `https://ttp.cbp.dhs.gov/schedulerapi/slots?orderBy=soonest&limit=11&locationId=${
+          locationId}&minimum=0`;
 
   try {
     const response = await fetch(url);
@@ -44,7 +38,7 @@ async function fetchSlotAvailability(locationId: number):
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data: SlotAvailabilityResponse = await response.json();
+    const data: any[] = await response.json();
     return data;
   } catch (error) {
     console.error('Error fetching slot availability:', error);
