@@ -14,8 +14,9 @@ export default async function handler(
     if (data.length > 0) {
       available = true;
       const notifier = new Notifier();
-      const content = 'Ding ding ding!!! A new slot is available, chop chop!'
-      notifier.notify(content);
+      const content = 'Ding ding ding!!! A new slot is available, chop chop!';
+      const subject = 'A new TTP slot is available!';
+      notifier.notify(content, subject);
     } else {
       console.log('No interview slots available at this location.')
     }
