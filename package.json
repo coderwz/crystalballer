@@ -19,8 +19,11 @@
     "typescript": "5.0.4"
   },
   "packageManager": "yarn@3.5.0",
+  "engines": {
+    "node": "22.x"
+  },
   "devDependencies": {
-    "@types/node": "18.15.11",
+    "@types/node": "22.x",
     "@types/nodemailer": "^6.4.7",
     "@types/react": "18.0.34",
     "eslint": "8.38.0",
